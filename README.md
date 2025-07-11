@@ -1,2 +1,3 @@
 # argonne-quantum-circuit-benchmarking
-Benchmarking quantum circuits across multiple Intel back-ends and configurations using the Intel Quantum SDK.
+
+This project benchmarks various quantum circuits with Intel’s spin qubit platform using the Intel Quantum SDK, evaluating execution across ideal simulators, hardware-aware environments, and (hopefully) physical hardware.
