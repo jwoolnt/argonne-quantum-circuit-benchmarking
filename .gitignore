@@ -1,3 +1,10 @@
+# Intel Quantum SDK
+qbuild/
+visualization/
+Visualization/
+*.qs
+*.ll
+
 # Prerequisites
 *.d
 
