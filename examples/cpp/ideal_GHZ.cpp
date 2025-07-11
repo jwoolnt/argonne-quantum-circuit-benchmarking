@@ -1,0 +1,65 @@
+//===----------------------------------------------------------------------===//
+// Copyright 2023-2024 Intel Corporation.
+//
+// This software and the related documents are Intel copyrighted materials, and
+// your use of them is governed by the express license under which they were
+// provided to you ("License"). Unless the License provides otherwise, you may
+// not use, modify, copy, publish, distribute, disclose or transmit this
+// software or the related documents without Intel's prior written permission.
+//
+// This software and the related documents are provided as is, with no express
+// or implied warranties, other than those that are expressly stated in the
+// License.
+//===----------------------------------------------------------------------===//
+
+#include <clang/Quantum/quintrinsics.h>
+
+/// Quantum Runtime Library APIs
+#include <quantum_full_state_simulator_backend.h>
+
+const int total_qubits = 4;
+qbit qubit_register[total_qubits];
+
+quantum_kernel void ghz_total_qubits() {
+  for (int i = 0; i < total_qubits; i++) {
+    PrepZ(qubit_register[i]);
+  }
+
+  H(qubit_register[0]);
+
+  for (int i = 0; i < total_qubits - 1; i++) {
+    CNOT(qubit_register[i], qubit_register[i + 1]);
+  }
+}
+
+int main() {
+  iqsdk::IqsConfig settings(total_qubits, "noiseless");
+  settings.verbose = true;
+  iqsdk::FullStateSimulator quantum_8086(settings);
+  if (iqsdk::QRT_ERROR_SUCCESS != quantum_8086.ready())
+    return 1;
+
+  // get references to qbits
+  std::vector<std::reference_wrapper<qbit>> qids;
+  for (int id = 0; id < total_qubits; ++id) {
+    qids.push_back(std::ref(qubit_register[id]));
+  }
+
+  ghz_total_qubits();
+
+  // use string constructor of Quantum State Space index to choose which
+  // basis states' data is retrieved
+  std::vector<iqsdk::QssIndex> bases = {iqsdk::QssIndex("|0000>"),
+                                        iqsdk::QssIndex("|1111>")};
+
+  iqsdk::QssMap<double> probability_map;
+  probability_map = quantum_8086.getProbabilities(qids, bases);
+
+  double total_probability = 0.0;
+  for (auto const &key_value : probability_map) {
+    total_probability += key_value.second;
+  }
+  std::cout << "Sum of probability to measure fully entangled state: "
+            << total_probability << std::endl;
+  quantum_8086.displayProbabilities(probability_map);
+}
