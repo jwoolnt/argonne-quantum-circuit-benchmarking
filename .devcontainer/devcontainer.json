@@ -1,0 +1,24 @@
+{
+	"name": "Intel Quantum SDK Dev Container",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": "."
+	},
+	"mounts": [
+		"source=/etc/gitconfig,target=/etc/gitconfig,type=bind,consistency=cached"
+	],
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"python.pythonPath": "/usr/bin/python3"
+	},
+	"extensions": [
+		"ms-python.python"
+	],
+	"runArgs": [
+		"--cap-add=SYS_PTRACE",
+		"--security-opt",
+		"seccomp=unconfined"
+	],
+	"remoteUser": "root",
+	"postCreateCommand": "pip3 install --upgrade pip"
+}
