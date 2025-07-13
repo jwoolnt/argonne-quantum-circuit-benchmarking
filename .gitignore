@@ -5,6 +5,9 @@ Visualization/
 *.qs
 *.ll
 
+# Other Files
+.notes
+
 # Prerequisites
 *.d
 
