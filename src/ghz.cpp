@@ -3,6 +3,7 @@
 
 const int TOTAL_QUBITS = 20;
 qbit qubit_register[TOTAL_QUBITS];
+cbit cbit_register[TOTAL_QUBITS];
 
 
 #define GHZ(N) \
@@ -13,6 +14,18 @@ quantum_kernel void ghz_##N() { \
   H(qubit_register[0]); \
   for (int i = 0; i < N - 1; i++) { \
     CNOT(qubit_register[i], qubit_register[i + 1]); \
+  } \
+} \
+quantum_kernel void ghzM_##N() { \
+  for (int i = 0; i < N; i++) { \
+    PrepZ(qubit_register[i]); \
+  } \
+  H(qubit_register[0]); \
+  for (int i = 0; i < N - 1; i++) { \
+    CNOT(qubit_register[i], qubit_register[i + 1]); \
+  } \
+  for (int i = 0; i < N; i++) { \
+    MeasZ(qubit_register[i], cbit_register[i]); \
   } \
 }
 
