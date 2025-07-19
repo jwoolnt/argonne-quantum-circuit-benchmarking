@@ -18,7 +18,7 @@ def compileAndLoad(
 		*,
 		clear: bool = True,
 		copy_compile: bool = True,
-		visualization: str = "json"
+		visualization: str | None = None
 	):
 	file_name = f"{sdk_name}.cpp"
 	file_path = path.join(SRC_PATH, file_name)
@@ -46,6 +46,8 @@ def compileAndLoad(
 
 	compileProgram(COMPILER_PATH, file_path, flags, sdk_name)
 
+	# TODO: use "local" Visualization folder?
+
 	if copy_compile:
 		remove(file_path)
 	else:
@@ -54,4 +56,4 @@ def compileAndLoad(
 
 
 if __name__ == "__main__":
-	compileAndLoad("example", visualization="console")
+	compileAndLoad("example", visualization="json")
