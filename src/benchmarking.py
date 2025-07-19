@@ -1,12 +1,15 @@
+from time import time
+
 import intelqsdk.cbindings as iqsdk
 
 from qprep import compileAndLoad
+from qstate import cbits_to_state
 
 
 SDK_NAME = "ghz"
-TOTAL_QUBITS = 20
+TOTAL_QUBITS = 15 # up to 15-16 takes ~1 minute (on my laptop)
 SIMULATION_TYPE = "depolarizing"
-NUM_SAMPLES = 10
+NUM_SAMPLES = 1000
 
 
 compileAndLoad(SDK_NAME, replace=False)
@@ -20,6 +23,9 @@ cbit_ref = [
     iqsdk.CbitRef("cbit_register", i, SDK_NAME) for i in range(TOTAL_QUBITS)
 ]
 
+start_time = time()
+print("Collecting Samples...")
+
 for num_qubits in range(1, TOTAL_QUBITS + 1):
     iqs_config.num_qubits = num_qubits
     for sample_num in range(NUM_SAMPLES):
@@ -29,8 +35,9 @@ for num_qubits in range(1, TOTAL_QUBITS + 1):
         iqsdk.callCppFunction(f"ghzM_{num_qubits}", SDK_NAME)
         iqs_device.wait()
 
-        state = "".join([
-            "1" if cbit_ref[i].value() else "0" for i in range(num_qubits)
-        ])
-        state = f"|{state}>"
-        print(num_qubits, sample_num, state)
+        state = cbits_to_state(cbit_ref, num_qubits, True)
+        # print(num_qubits, sample_num, state)
+    print(f"{num_qubits}-Qubit Samples Complete")
+
+end_time = time()
+print("Sample Collection Complete", end_time - start_time)
