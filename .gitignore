@@ -1,5 +1,6 @@
 ## Project .gitignore
 qbuild/
+results/
 visualization/
 Visualization/
 *.qs
