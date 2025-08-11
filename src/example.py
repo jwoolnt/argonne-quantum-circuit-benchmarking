@@ -1,6 +1,6 @@
 import intelqsdk.cbindings as iqsdk
 
-from qprep import compileAndLoad
+from prep import compileAndLoad
 
 
 SDK_NAME = "ghz"

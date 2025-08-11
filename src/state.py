@@ -21,6 +21,9 @@ def complement_state(state: str) -> str:
 	state = "".join(state)
 	return f"|{state}>"
 
+def bucket_state_n(n: int) -> tuple[str, str]:
+	return ["|" + n * "0" + ">", "|" + n * "1" + ">"]
+
 
 if __name__ == "__main__":
 	for state in ["|0000>", "|1111>", "|0101>", "|1010>"]:
