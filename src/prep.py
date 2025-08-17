@@ -3,12 +3,7 @@ from shutil import rmtree, copyfile
 
 from intelqsdk.cbindings import compileProgram, loadSdk
 
-
-COMPILER_PATH = "/opt/intel/quantum-sdk/latest/intel-quantum-compiler"
-CIRCUITS_FOLDER = "src/circuits"
-OUTPUT_FOLDER = "qbuild"
-VISUALIZATION_FOLDER = "Visualization"
-VISUALIZATION_OPTIONS = {"console", "tex", "json"}
+from globals import COMPILER_PATH, CIRCUITS_FOLDER, OUTPUT_FOLDER, VISUALIZATION_FOLDER, VISUALIZATION_OPTIONS
 
 
 def compileAndLoad(
