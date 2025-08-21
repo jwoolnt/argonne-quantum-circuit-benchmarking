@@ -11,4 +11,5 @@ RUN apt-get update && \
 # Install Pandas & MatPlotLib
 RUN /opt/intel/quantum-sdk/latest/virtualenv/bin/pip install \
 	pandas \
-	matplotlib
+	matplotlib \
+	seaborn
