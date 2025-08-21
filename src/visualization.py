@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 from globals import RESULTS_FOLDER
 
@@ -36,5 +37,15 @@ def depolarizing_rate(input_path: str, output_path: str):
     plt.savefig(f"{output_path}.png")
 
 
+def correlation(input_path: str, output_path: str):
+    df = pd.read_csv(f"{input_path}.csv")
+
+    plt.figure(figsize=(10, 6))
+
+    sns.heatmap(df.corr(), annot=True, cmap="viridis", fmt=".2f")
+
+    plt.savefig(f"{output_path}.png")
+
+
 if __name__ == "__main__":
-	visualize("ghz", depolarizing_rate, input_name="test")
+	visualize("ghz_error", correlation)

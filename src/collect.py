@@ -52,5 +52,27 @@ def depolarizing_rate(
 			}
 
 
+def correlation(sdk_name: str, num_samples: int = 100):
+	from subprocess import run
+
+	percentage = 0
+	for sample_num in range(num_samples):
+		if sample_num % (num_samples / 10) == 0:
+			print(f"{percentage}%...")
+			percentage += 10
+
+		result = run(
+			[f"qbuild/{sdk_name}"],
+			capture_output=True,
+			text=True
+		)
+		s = result.stdout
+
+		yield {
+			f"qubit_{i}":s[i] for i in range(len(s)) if s[i] in {"0", "1"}
+		}
+	print("100%")
+
+
 if __name__ == "__main__":
-	collect("ghz", depolarizing_rate, 10, [0.0, 0.1], 100, file_name="test")
+	collect("ghz_error", correlation)

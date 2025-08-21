@@ -51,6 +51,7 @@ def compileAndLoad(
 	flags.append("-s")
 	flags = " ".join(flags)
 
+	# iqc -o qbuild src/circuits/
 	compileProgram(COMPILER_PATH, file_path, flags, sdk_name)
 
 	# TODO: Move latex files to visualization folder
