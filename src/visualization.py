@@ -47,5 +47,37 @@ def correlation(input_path: str, output_path: str):
     plt.savefig(f"{output_path}.png")
 
 
+def correlation_fidelity(
+        input_path: str,
+        output_path: str,
+        num_samples: int = 100,
+        sample_size: int = 100
+):
+    df = pd.read_csv(f"{input_path}.csv")
+
+    correlation = []
+    fidelity = []
+    for _ in range(num_samples):
+         sample = df.sample(sample_size)
+         correlated = sample["qubit_0"] == sample["qubit_1"]
+         correct = sample.nunique(axis=1) == 1
+
+         correlation.append(correlated.sum() / sample_size)
+         fidelity.append(correct.sum() / sample_size)
+
+    plt.figure(figsize=(10, 6))
+
+    plt.plot(correlation, fidelity, "o")
+
+    plt.title("How does GHZ Fidelity relate to Correlation Rate?")
+    plt.xlabel("Correlation Rate (%)")
+    plt.ylabel("GHZ Fidelity (%)")
+    plt.grid(True)
+
+    plt.savefig(f"{output_path}.png")
+
+
 if __name__ == "__main__":
-	visualize("ghz_error", correlation)
+    sdk_name = "ghz_manual"
+    visualize(sdk_name, correlation)
+    visualize(sdk_name, correlation_fidelity)

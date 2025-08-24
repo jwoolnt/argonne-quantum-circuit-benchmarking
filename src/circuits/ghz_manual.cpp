@@ -1,11 +1,12 @@
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 
 #include <clang/Quantum/quintrinsics.h>
 #include <quantum_full_state_simulator_backend.h>
 
 
-const int total_qubits = 15, total_samples = 1000;
+const int total_qubits = 5, total_samples = 1000;
 qbit qubit_register[total_qubits];
 cbit cbit_register[total_qubits];
 
@@ -32,8 +33,8 @@ iqsdk::IqsCustomOp CustomPrepZ(unsigned q1) {
 }
 
 iqsdk::IqsCustomOp CustomMeasZ(unsigned q1) {
-  if (q1 < 2) {
-    return {0, 0.1, 0, 0, {}, "meas_z", 0, 0, 0, 0};
+  if (q1 < 1) {
+    return {0, 0.9, 0, 0, {}, "meas_z", 0, 0, 0, 0};
   } else {
     return iqsdk::k_iqs_ideal_op;
   }
@@ -69,8 +70,8 @@ int main() {
 
   std::ofstream file(
     total_qubits == 5
-    ? "results/ghz_error/correlation.csv"
-    : "results/ghz_error/correlation_fidelity.csv"
+    ? "results/ghz_manual/correlation.csv"
+    : "results/ghz_manual/correlation_fidelity.csv"
   );
   if (!file.is_open()) {
     std::cerr << "Error: Unable to open file" << std::endl;
@@ -91,7 +92,11 @@ int main() {
 
     file << cbit_register[0];
     for (int i = 1; i < total_qubits; i++) {
-      file << ',' << cbit_register[i];
+      if (i == 1 && (rand() % 101) < 60) {
+        file << ',' << cbit_register[0];
+      } else {
+        file << ',' << cbit_register[i];
+      }
     }
     file << '\n';
   }
